@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using DataAccess;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,30 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        public RestaurantDbContext context { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void myTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                if (myTabControl.SelectedItem is TabItem selectedTab)
+                {
+                    if (selectedTab.Header.ToString()=="Menu")
+                    {
+                        LoadMenuData();
+                    }
+                }
+            }
+        }
+        private void LoadMenuData()
+        {
+            //треба заповнити БД
+            //var data = context.
+            //menuDataGrid.ItemsSource = data;
         }
     }
 }

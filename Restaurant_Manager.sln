@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{93596F33-214D-4EB1-9B17-CCBD5E5D7E44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainClientWindow", "WpfApp1\MainClientWindow.csproj", "{93596F33-214D-4EB1-9B17-CCBD5E5D7E44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{1016D2DB-2EC0-45ED-B13F-B3B4182756D5}"
 EndProject
