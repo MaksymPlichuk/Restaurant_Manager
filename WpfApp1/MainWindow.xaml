@@ -7,6 +7,28 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TabControl Name="myTabControl" SelectionChanged="myTabControl_SelectionChanged">
+            <TabItem Header="Menu">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Background="LightCoral" Name="menuDataGrid">
 
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Cart">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Background="LightCyan" Name="cartDataGrid">
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Table Reservation">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Background="LightPink" Name="reservationDataGrid">
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
