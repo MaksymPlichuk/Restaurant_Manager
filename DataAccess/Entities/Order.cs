@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    internal class Order
+    public class Order
     {
         public int Id { get; set; }
         public User User { get; set; }
