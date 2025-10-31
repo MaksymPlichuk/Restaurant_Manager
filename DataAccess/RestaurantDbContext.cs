@@ -27,10 +27,75 @@ namespace DataAccess
         {
             base.OnModelCreating(modelBuilder);
             //зв'язки
-            //modelBuilder.Entity<Booking>
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.BookingDate)
+                .IsRequired();
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.NumberOfTables)
+                .IsRequired();
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.User)
+                .WithMany(u => u.Bookings);
 
+            modelBuilder.Entity<Order>()
+                .Property(o => o.OrderDate)
+                .IsRequired();
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders);
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.Products)
+                .WithOne(p => p.Order);
 
-            //modelBuilder.SeedCategories();
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Name)
+                .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .IsRequired();
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products);
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Order)
+                .WithMany(o => o.Products);
+
+            modelBuilder.Entity<Review>()
+                .Property(r => r.Content)
+                .IsRequired();
+            modelBuilder.Entity<Review>()
+                .Property(r => r.Rating)
+                .IsRequired();
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reviews);
+            modelBuilder.Entity<Review>()
+                .Property(r => r.ReviewDate)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Login)
+                .IsRequired();
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .IsRequired();
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .IsRequired();
+
+            modelBuilder.Entity<Category>()
+                .Property(c => c.Name)
+                .IsRequired();
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Category);
+
+            modelBuilder.SeedCategories();
+            modelBuilder.SeedBooking();
+            modelBuilder.SeedOrder();
+            modelBuilder.SeedProduct();
+            modelBuilder.SeedReview();
+            modelBuilder.SeedUser();
         }
 
         public DbSet<Booking> Bookings { get; set; }
