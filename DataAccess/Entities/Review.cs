@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    internal class Review
+    public class Review
     {
         public int Id { get; set; }
         public User User { get; set; }
