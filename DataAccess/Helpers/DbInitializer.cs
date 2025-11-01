@@ -23,12 +23,6 @@ namespace DataAccess.Helpers
 
 
         }
-        public static void SeedOrder(this ModelBuilder modelBuilder)
-        {
-            
-
-
-        }
         public static void SeedProduct(this ModelBuilder modelBuilder)
         {
             
@@ -45,6 +39,32 @@ namespace DataAccess.Helpers
         {
             
 
+        }
+        public static void SeedOrder(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>().HasData(
+                new Order
+                {
+                    Id = 1,
+                    UserId = 1,
+                    OrderDate = DateTime.Now.AddHours(-2),
+                    Status = OrderStatus.New
+                },
+                new Order
+                {
+                    Id = 2,
+                    UserId = 1,
+                    OrderDate = DateTime.Now.AddHours(-1),
+                    Status = OrderStatus.Preparing
+                },
+                new Order
+                {
+                    Id = 3,
+                    UserId = 1,
+                    OrderDate = DateTime.Now.AddMinutes(-30),
+                    Status = OrderStatus.Ready
+                }
+            );
         }
     }
 }

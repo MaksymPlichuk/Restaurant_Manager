@@ -13,5 +13,13 @@ namespace DataAccess.Entities
         public int UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public ICollection<Product> Products { get; set; }
+
+        public OrderStatus Status { get; set; } = OrderStatus.New;
+    }
+    public enum OrderStatus
+    {
+        New,
+        Preparing,
+        Ready
     }
 }
