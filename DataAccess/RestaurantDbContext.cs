@@ -89,6 +89,10 @@ namespace DataAccess
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category);
+            modelBuilder.Entity<Order>()
+                .Property(o => o.Status)
+                .HasDefaultValue(OrderStatus.New)
+                .IsRequired();
 
             modelBuilder.SeedCategories();
             modelBuilder.SeedBooking();
@@ -106,4 +110,4 @@ namespace DataAccess
         public DbSet<User> Users { get; set; }
 }
     }
-}
+
