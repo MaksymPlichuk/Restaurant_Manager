@@ -246,7 +246,7 @@ class MenuManager
 
         var confirm = Console.ReadLine()?.ToLower();
 
-        if (confirm == "yes" || confirm == "так")
+        if (confirm == "yes" || confirm == "no")
 
         {
 
