@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainClientWindow", "WpfApp1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{1016D2DB-2EC0-45ED-B13F-B3B4182756D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleManager", "ConsoleManager\ConsoleManager.csproj", "{288146B8-CB89-4C50-934B-48180F764BF9}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantOrderMonitor", "RestaurantOrderMonitor\RestaurantOrderMonitor.csproj", "{BAA3C210-8246-43FD-BC5D-47887A80E7D8}"
 EndProject
 Global
@@ -23,6 +24,10 @@ Global
 		{1016D2DB-2EC0-45ED-B13F-B3B4182756D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1016D2DB-2EC0-45ED-B13F-B3B4182756D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1016D2DB-2EC0-45ED-B13F-B3B4182756D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{288146B8-CB89-4C50-934B-48180F764BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{288146B8-CB89-4C50-934B-48180F764BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{288146B8-CB89-4C50-934B-48180F764BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{288146B8-CB89-4C50-934B-48180F764BF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BAA3C210-8246-43FD-BC5D-47887A80E7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BAA3C210-8246-43FD-BC5D-47887A80E7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAA3C210-8246-43FD-BC5D-47887A80E7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
