@@ -1,171 +1,167 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using DataAccess;
-using DataAccess.Entities;
 
-class MenuManager
-
+public class User
 {
-    static void Main()
+    public int Id { get; set; }
+    public string Login { get; set; } = "";
+    public string Password { get; set; } = "";
+    public string Role { get; set; } = "";
+    public List<Booking> Bookings { get; set; } = new List<Booking>();
+    public List<Order> Orders { get; set; } = new List<Order>();
+    public List<Review> Reviews { get; set; } = new List<Review>();
+}
 
+public class Booking
+{
+    public int Id { get; set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
+    public DateTime BookingDate { get; set; }
+    public int NumberOfTables { get; set; }
+}
+
+public class Category
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public List<Product> Products { get; set; } = new List<Product>();
+}
+
+public class Order
+{
+    public int Id { get; set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public List<Product> Products { get; set; } = new List<Product>();
+    public bool IsActive { get; set; } = true;
+}
+
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public Category Category { get; set; }
+    public int CategoryId { get; set; }
+    public int Price { get; set; }
+    public bool IsSold { get; set; } = false;
+}
+
+public class Review
+{
+    public int Id { get; set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
+    public string Content { get; set; } = "";
+    public int Rating { get; set; }
+    public DateTime ReviewDate { get; set; }
+}
+
+public class ProductService
+{
+    private List<Product> products = new List<Product>();
+    private List<Order> orders = new List<Order>();
+    private List<Category> categories = new List<Category>();
+    private int nextProductId = 1;
+    private int nextCategoryId = 1;
+    private int nextOrderId = 1;
+
+    public void AddProduct()
     {
-        Console.OutputEncoding = Encoding.UTF8;
-        using var db = new RestaurantDbContext();
-
-        while (true)
-        {
-
-            Console.WriteLine("\n=== RESTAURANT MENU MANAGER ===");
-
-            Console.WriteLine("1 Add a dish");
-            Console.WriteLine("2 Edit a dish");
-            Console.WriteLine("3 Delete a dish");
-            Console.WriteLine("4 Show all dishes");
-            Console.WriteLine("5 Show dishes by category");
-            Console.WriteLine("0 Exit");
-
-            Console.Write("Your choice: ");
-
-            var choice = Console.ReadLine();
-
-            switch (choice)
-            {
-
-                case "1": AddProduct(db); break;
-                case "2": EditProduct(db); break;
-                case "3": DeleteProduct(db); break;
-                case "4": ShowAllProducts(db); break;
-                case "5": ShowByCategory(db); break;
-
-                case "0":
-                    Console.WriteLine("Goodbye");
-                    return;
-
-                default:
-                    Console.WriteLine("Invalid choice, please try again");
-                    break;     
-            }
-        }
-    }
-
-    static void AddProduct(RestaurantDbContext db)
-    {
-
-        Console.WriteLine("\n--- ADD A NEW DISH ---");
-        
-        Console.Write("Dish name: ");
+        Console.Write("Enter dish name: ");
         string name = Console.ReadLine() ?? "";
-        
-        Console.Write("Price (UAH): ");
-
+        Console.Write("Enter price: ");
         if (!int.TryParse(Console.ReadLine(), out int price))
         {
-            Console.WriteLine("Invalid price format");
+            Console.WriteLine("Invalid price");
             return;
         }
-
-        Console.Write("Category: ");
+        Console.Write("Enter category (or leave empty): ");
         string categoryName = Console.ReadLine() ?? "";
-
-        var category = db.Categories.FirstOrDefault(c => c.Name == categoryName);
-        if (category == null)
+        Category category = null;
+        if (!string.IsNullOrWhiteSpace(categoryName))
         {
-            category = new Category { Name = categoryName };
-            db.Categories.Add(category);
-        }
-
-        var product = new Product
-        {
-            Name = name,
-            Price = price,
-            Category = category
-        };
-
-        db.Products.Add(product);
-        db.SaveChanges();
-
-        Console.WriteLine($"Dish '{name}' added successfully");
-    }
-
-    static void EditProduct(RestaurantDbContext db)
-    {
-        ShowAllProducts(db);
-        Console.Write("\nEnter the dish ID to edit: ");
-
-        if (!int.TryParse(Console.ReadLine(), out int id))
-        {
-            Console.WriteLine("Invalid ID");
-            return;
-        }
-
-        var product = db.Products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
-
-        if (product == null)
-        {
-            Console.WriteLine("Dish not found");
-            return;
-        }
-
-        Console.WriteLine($"\nEditing: {product.Name}");
-        Console.WriteLine("(Press Enter to keep the current value)\n");
-        
-        Console.Write($"Name [{product.Name}]: ");
-        
-        var newName = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newName))
-            product.Name = newName;
-
-        Console.Write($"Price [{product.Price}]: ");
-
-        if (int.TryParse(Console.ReadLine(), out var newPrice))
-            product.Price = newPrice;
-
-        Console.Write($"Category [{product.Category?.Name}]: ");
-
-        var newCategoryName = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newCategoryName))
-        {
-            var category = db.Categories.FirstOrDefault(c => c.Name == newCategoryName);
+            category = categories.FirstOrDefault(c => c.Name.Equals(categoryName, StringComparison.OrdinalIgnoreCase));
             if (category == null)
             {
-                category = new Category { Name = newCategoryName };
-                db.Categories.Add(category);
+                category = new Category { Id = nextCategoryId++, Name = categoryName };
+                categories.Add(category);
             }
-            product.Category = category;
         }
-        db.SaveChanges();
-
-        Console.WriteLine("Dish successfully updated");
+        var product = new Product { Id = nextProductId++, Name = name, Price = price, Category = category };
+        products.Add(product);
+        if (category != null) category.Products.Add(product);
+        Console.WriteLine("Dish added successfully");
     }
 
-    static void DeleteProduct(RestaurantDbContext db)
+    public void EditProduct()
     {
-        ShowAllProducts(db);
-        
-        Console.Write("\nEnter the dish ID to delete: ");
+        ShowAllProducts();
+        Console.Write("Enter dish ID to edit: ");
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
             Console.WriteLine("Invalid ID");
             return;
         }
-
-        var product = db.Products.Find(id);
-
+        var product = products.FirstOrDefault(p => p.Id == id);
         if (product == null)
         {
             Console.WriteLine("Dish not found");
             return;
         }
-
-        Console.Write($"Are you sure you want to delete '{product.Name}'? (yes/no): ");
-        var confirm = Console.ReadLine()?.ToLower();
-
-        if (confirm == "yes" || confirm == "no")
+        Console.WriteLine($"Editing {product.Name} (press Enter to keep)");
+        Console.Write($"Name [{product.Name}]: ");
+        var newName = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newName)) product.Name = newName;
+        Console.Write($"Price [{product.Price}]: ");
+        var priceInput = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(priceInput) && int.TryParse(priceInput, out int newPrice)) product.Price = newPrice;
+        Console.Write($"Category [{product.Category?.Name ?? "none"}]: ");
+        var newCat = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newCat))
         {
-            db.Products.Remove(product);
-            db.SaveChanges();
+            var category = categories.FirstOrDefault(c => c.Name.Equals(newCat, StringComparison.OrdinalIgnoreCase));
+            if (category == null)
+            {
+                category = new Category { Id = nextCategoryId++, Name = newCat };
+                categories.Add(category);
+            }
+            product.Category?.Products.Remove(product);
+            product.Category = category;
+            category.Products.Add(product);
+        }
+        Console.WriteLine("Dish updated");
+    }
+
+    public void DeleteProduct()
+    {
+        ShowAllProducts();
+        Console.Write("Enter dish ID to delete: ");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid ID");
+            return;
+        }
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            Console.WriteLine("Dish not found");
+            return;
+        }
+        bool hasActiveOrder = orders.Any(o => o.IsActive && o.Products.Any(p => p.Id == id));
+        if (hasActiveOrder)
+        {
+            Console.WriteLine("Cannot delete this dish it is part of an active order");
+            return;
+        }
+        Console.Write($"Are you sure you want to delete '{product.Name}' yes/no: ");
+        var confirm = (Console.ReadLine() ?? "").Trim().ToLower();
+        if (confirm == "yes" || confirm == "y")
+        {
+            products.Remove(product);
+            product.Category?.Products.Remove(product);
             Console.WriteLine("Dish deleted");
         }
 
@@ -175,56 +171,175 @@ class MenuManager
         }
     }
 
-    static void ShowAllProducts(RestaurantDbContext db)
+    public void ShowAllProducts()
     {
-        var products = db.Products.Include(p => p.Category).ToList();
-
-        if (products.Count == 0)
+        if (!products.Any())
         {
-            Console.WriteLine("\nThe menu is empty, add some dishes");
+            Console.WriteLine("No dishes available");
             return;
         }
-
-        Console.WriteLine("\n╔═══════════════════════════════════════════════╗");
-        Console.WriteLine("║               ALL MENU DISHES                 ║");
-        Console.WriteLine("╚═══════════════════════════════════════════════╝");
-
         foreach (var p in products)
         {
-            Console.WriteLine($"\nID: {p.Id}");
-            Console.WriteLine($"Name: {p.Name}");
-            Console.WriteLine($"Price: {p.Price} ₴");
-            Console.WriteLine($"Category: {p.Category?.Name ?? "No category"}");
-            Console.WriteLine("───────────────────────────────────────────────");
+            Console.WriteLine($"{p.Id} {p.Name} {p.Price} UAH Category:{p.Category?.Name ?? "none"} Sold:{p.IsSold}");
         }
     }
 
-    static void ShowByCategory(RestaurantDbContext db)
+    public void CreateOrder()
     {
-        Console.Write("\nEnter the category name: ");
-        string categoryName = Console.ReadLine() ?? "";
-
-        var products = db.Products
-            .Include(p => p.Category)
-            .Where(p => p.Category != null && p.Category.Name == categoryName)
-            .ToList();
-
-        if (products.Count == 0)
+        if (!products.Any())
         {
-            Console.WriteLine($"\nNo dishes found in category '{categoryName}'");
+            Console.WriteLine("No dishes to order");
             return;
-
+        }
+        var order = new Order { Id = nextOrderId++, OrderDate = DateTime.Now, IsActive = true };
+        while (true)
+        {
+            ShowAllProducts();
+            Console.Write("Enter dish ID to add to order or 0 to finish: ");
+            if (!int.TryParse(Console.ReadLine(), out int id) || id == 0) break;
+            var product = products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                Console.WriteLine("Dish not found");
+                continue;
+            }
+            order.Products.Add(product);
+            Console.WriteLine($"Added {product.Name}");
+        }
+        if (order.Products.Any())
+        {
+            orders.Add(order);
+            Console.WriteLine($"Order {order.Id} created with {order.Products.Count} items");
         }
 
-        Console.WriteLine($"\n╔═══════════════════════════════════════════════╗");
-        Console.WriteLine($"║     CATEGORY: {categoryName.ToUpper().PadRight(28)} ║");
-        Console.WriteLine("╚═══════════════════════════════════════════════╝");
-
-        foreach (var p in products)
+        else
         {
-            Console.WriteLine($"\n{p.Name} — {p.Price} ₴");
+            Console.WriteLine("Empty order not created");
         }
     }
 
+    public void CloseOrder()
+    {
+        if (!orders.Any())
+        {
+            Console.WriteLine("No orders");
+            return;
+        }
+        Console.Write("Enter order ID to close: ");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid ID");
+            return;
+        }
+        var order = orders.FirstOrDefault(o => o.Id == id);
+        if (order == null)
+        {
+            Console.WriteLine("Order not found");
+            return;
+        }
+        order.IsActive = false;
+        foreach (var p in order.Products) p.IsSold = true;
+        Console.WriteLine($"Order {id} closed");
+    }
+
+    public void ShowSalesStatistics()
+    {
+        var sold = orders.Where(o => !o.IsActive).SelectMany(o => o.Products).ToList();
+        if (!sold.Any())
+        {
+            Console.WriteLine("No sales data yet");
+            return;
+
+        }
+        int count = sold.Count;
+        int total = sold.Sum(p => p.Price);
+        double avg = sold.Average(p => p.Price);
+        Console.WriteLine("Sales statistics");
+        Console.WriteLine($"Sold dishes {count}");
+        Console.WriteLine($"Total revenue {total} UAH");
+        Console.WriteLine($"Average price {avg:F2} UAH");
+    }
+    //
+    public void SeedExampleData()
+    {
+        if (products.Any()) return;
+        var c1 = new Category { Id = nextCategoryId++, Name = "Main" };
+        var c2 = new Category { Id = nextCategoryId++, Name = "Dessert" };
+        categories.Add(c1);
+        categories.Add(c2);
+        var p1 = new Product { Id = nextProductId++, Name = "Borscht", Price = 120, Category = c1 };
+        var p2 = new Product { Id = nextProductId++, Name = "Varenyky", Price = 90, Category = c1 };
+        var p3 = new Product { Id = nextProductId++, Name = "Syrnyk", Price = 70, Category = c2 };
+        products.AddRange(new[] { p1, p2, p3 });
+        c1.Products.AddRange(new[] { p1, p2 });
+        c2.Products.Add(p3);
+        var order = new Order { Id = nextOrderId++, OrderDate = DateTime.Now.AddDays(-1), IsActive = false };
+        order.Products.Add(p1);
+        order.Products.Add(p3);
+        orders.Add(order);
+        p1.IsSold = true;
+        p3.IsSold = true;
+    }
+}
+//
+public class MenuUI
+{
+    private ProductService service = new ProductService();
+
+    public void Run()
+    {
+        service.SeedExampleData();
+        while (true)
+        {
+            Console.WriteLine("\nRestaurant menu manager");
+            Console.WriteLine("1 Add dish");
+            Console.WriteLine("2 Edit dish");
+            Console.WriteLine("3 Delete dish");
+            Console.WriteLine("4 Show all dishes");
+            Console.WriteLine("5 Create order");
+            Console.WriteLine("6 Close order");
+            Console.WriteLine("7 Show sales statistics");
+            Console.WriteLine("0 Exit");
+            Console.Write("Choice: ");
+            var choice = Console.ReadLine() ?? "";
+            switch (choice)
+            {
+                case "1":
+                    service.AddProduct();
+                    break;
+                case "2":
+                    service.EditProduct();
+                    break;
+                case "3":
+                    service.DeleteProduct();
+                    break;
+                case "4":
+                    service.ShowAllProducts();
+                    break;
+                case "5":
+                    service.CreateOrder();
+                    break;
+                case "6":
+                    service.CloseOrder();
+                    break;
+                case "7":
+                    service.ShowSalesStatistics();
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Invalid choice");
+                    break;
+            }
+        }
+    }
 }
 
+public class Program
+{
+    public static void Main()
+    {
+        var menu = new MenuUI();
+        menu.Run();
+    }
+}
