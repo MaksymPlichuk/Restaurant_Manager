@@ -54,35 +54,40 @@ namespace DataAccess.Helpers
                     Id = 1,
                     Name = "Bruschetta",
                     Price = 6.99,
-                    CategoryId = 1
+                    CategoryId = 1,
+                    OrderId = 1
                 },
                 new Product
                 {
                     Id = 2,
                     Name = "Caesar Salad",
                     Price = 8.99,
-                    CategoryId = 2
+                    CategoryId = 2,
+                    OrderId = 2
                 },
                 new Product
                 {
                     Id = 3,
                     Name = "Chocolate Lava Cake",
                     Price = 7.99,
-                    CategoryId = 3
+                    CategoryId = 3,
+                    OrderId = 3
                 },
                 new Product
                 {
                     Id = 4,
                     Name = "Tomato Soup",
                     Price = 5.99,
-                    CategoryId = 4
+                    CategoryId = 4,
+                    OrderId = 1
                 },
                 new Product
                 {
                     Id = 5,
                     Name = "Lemonade",
                     Price = 2.99,
-                    CategoryId = 5
+                    CategoryId = 5,
+                    OrderId = 2
                 }
 
             });

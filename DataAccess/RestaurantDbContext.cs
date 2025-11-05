@@ -31,7 +31,7 @@ namespace DataAccess
                 .Property(b => b.BookingDate)
                 .IsRequired();
             modelBuilder.Entity<Booking>()
-                .Property(b => b.NumberOfTables)
+                .Property(b => b.AmountOfTables)
                 .IsRequired();
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.User)
