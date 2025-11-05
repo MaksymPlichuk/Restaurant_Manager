@@ -164,6 +164,7 @@ public class ProductService
             product.Category?.Products.Remove(product);
             Console.WriteLine("Dish deleted");
         }
+
         else
         {
             Console.WriteLine("Deletion canceled");
@@ -248,6 +249,7 @@ public class ProductService
         {
             Console.WriteLine("No sales data yet");
             return;
+
         }
         int count = sold.Count;
         int total = sold.Sum(p => p.Price);
