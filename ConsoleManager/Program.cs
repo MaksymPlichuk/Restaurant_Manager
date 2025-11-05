@@ -210,6 +210,7 @@ public class ProductService
             orders.Add(order);
             Console.WriteLine($"Order {order.Id} created with {order.Products.Count} items");
         }
+
         else
         {
             Console.WriteLine("Empty order not created");
