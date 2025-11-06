@@ -10,8 +10,8 @@
         <TabControl Name="myTabControl" SelectionChanged="myTabControl_SelectionChanged">
             <TabItem Header="Menu">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Background="LightCoral" Name="menuDataGrid">
-
+                    <DataGrid Background="LightCoral" Name="menuDataGrid" IsReadOnly="True" AutoGenerateColumns="True">
+                        
                     </DataGrid>
                 </Grid>
             </TabItem>

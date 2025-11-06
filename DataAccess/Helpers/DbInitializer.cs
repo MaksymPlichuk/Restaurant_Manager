@@ -30,14 +30,14 @@ namespace DataAccess.Helpers
                 {
                     Id = 1,
                     UserId = 1,
-                    BookingDate = DateTime.Now.AddDays(1).Date.AddHours(19),
+                    BookingDate = new DateTime(2025,11,06,15,00,00).AddDays(1).Date.AddHours(19),
                     AmountOfTables = 2
                 },
                 new Booking
                 {
                     Id = 2,
                     UserId = 2,
-                    BookingDate = DateTime.Now.AddDays(2).Date.AddHours(20),
+                    BookingDate = new DateTime(2025,12,09,10,00,00).AddDays(2).Date.AddHours(20),
                     AmountOfTables = 1
                 }
 
@@ -157,21 +157,21 @@ namespace DataAccess.Helpers
                 {
                     Id = 1,
                     UserId = 1,
-                    OrderDate = DateTime.Now.AddHours(-2),
+                    OrderDate = new DateTime(2025,11,06,17,03,55).AddHours(-2),
                     Status = OrderStatus.New
                 },
                 new Order
                 {
                     Id = 2,
                     UserId = 1,
-                    OrderDate = DateTime.Now.AddHours(-1),
+                    OrderDate = new DateTime(2025, 11, 06, 19, 43, 24).AddHours(-1),
                     Status = OrderStatus.Preparing
                 },
                 new Order
                 {
                     Id = 3,
                     UserId = 1,
-                    OrderDate = DateTime.Now.AddMinutes(-30),
+                    OrderDate = new DateTime(2025, 11, 06, 11, 48, 44).AddMinutes(-30),
                     Status = OrderStatus.Ready
                 }
             );
