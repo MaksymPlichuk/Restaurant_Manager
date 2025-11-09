@@ -26,7 +26,7 @@ namespace DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //зв'язки
+
             modelBuilder.Entity<Booking>()
                 .Property(b => b.BookingDate)
                 .IsRequired();

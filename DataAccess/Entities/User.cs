@@ -15,6 +15,11 @@ namespace DataAccess.Entities
         public ICollection<Booking> Bookings { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Login}";
+        }
     }
     public enum UserRole
     {
