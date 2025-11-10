@@ -57,6 +57,9 @@ namespace WpfApp1
                     else if (selectedTab.Header.ToString()== "Table Reservation")
                     {
                         LoadReservationData();
+                    }else if (selectedTab.Header.ToString()== "Order Status")
+                    {
+                        LoadOrderData();
                     }
                 }
             }
@@ -65,6 +68,10 @@ namespace WpfApp1
         {
             var data = context.Products.Include(c => c.Category).Include(o=>o.Order).ToList();
             menuDataGrid.ItemsSource = data; 
+        }private void LoadOrderData()
+        {
+            var data = context.Orders.ToList();
+            orderDataGrid.ItemsSource = data; 
         }
         private void AddButtonToDataContext()
         {
