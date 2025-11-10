@@ -22,6 +22,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         public RestaurantDbContext context { get; set; }
+        public User LoggedInUser { get; set; }
         private ObservableCollection<Product> cartItems { get; set; }
         public MainWindow()
         {

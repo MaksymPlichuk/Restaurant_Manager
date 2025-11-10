@@ -24,12 +24,12 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Label FontSize="30" FontWeight="Bold" >Login:</Label>
-                    <TextBox Name="LoginTxt" Grid.Column="1" HorizontalAlignment="Center" MinWidth="220" Height="20" MaxWidth="220" FontSize="10"></TextBox>
+                    <TextBox Name="LoginTxt" Grid.Column="1" HorizontalAlignment="Center" VerticalContentAlignment="Center" MinWidth="220" Height="20" MaxWidth="220" FontSize="15"></TextBox>
                     
 
                     <Label FontSize="30" FontWeight="Bold" Grid.Row="1">Password:</Label>
 
-                    <TextBox Name="passTxt" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" MinWidth="220" Height="20" MaxWidth="220" FontSize="10"></TextBox>
+                    <TextBox Name="passTxt" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" MinWidth="220" Height="20" MaxWidth="220" FontSize="15" VerticalContentAlignment="Center"></TextBox>
 
                 </Grid>
                 <Button Name="signInBtn" Margin="15" FontSize="18" Click="signInBtn_Click">Sign In</Button>
