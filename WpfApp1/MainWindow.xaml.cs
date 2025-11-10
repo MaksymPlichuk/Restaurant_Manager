@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using DataAccess.Entities;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         public RestaurantDbContext context { get; set; }
+        public User LoggedInUser { get; set; }
         public MainWindow()
         {
             InitializeComponent();

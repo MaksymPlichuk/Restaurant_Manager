@@ -1,6 +1,7 @@
 ﻿using DataAccess.Entities;
 using DataAccess.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,38 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
+   
     public class RestaurantDbContext: DbContext
     {
+        public User FindUserByLogin( string mail, string pass)
+        {
+            User user = Users.FirstOrDefault(u => u.Login == mail && u.Password == pass);
+            if (user == null)
+            {
+                return RegistrationUser(mail, pass);
+            }
+            return user;
+        }
+        public User RegistrationUser(string mail, string pass)
+        {
+            User existingUser = Users.FirstOrDefault(u => u.Login == mail);
+            if (existingUser != null)
+            {
+                return existingUser;
+            }
+            User newUser = new User
+            {
+                Login = mail,
+                Password = pass,
+                Role = UserRole.Customer
+            };
+            Users.Add(newUser);
+            SaveChanges();
+            return newUser;
+        }
+        
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
