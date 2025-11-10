@@ -10,23 +10,37 @@
         <TabControl Name="myTabControl" SelectionChanged="myTabControl_SelectionChanged">
             <TabItem Header="Menu">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Background="LightCoral" Name="menuDataGrid">
-
+                    <DataGrid Background="LightCoral" Name="menuDataGrid" IsReadOnly="True" AutoGenerateColumns="True">
+                        
                     </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Cart">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Background="LightCyan" Name="cartDataGrid">
-
-                    </DataGrid>
+                    <DockPanel Background="LightCyan">
+                        <Button DockPanel.Dock="Top" MaxWidth="350" Click="FinishOrder_Click" Margin="0,5,0,0">Finish Order</Button>
+                        
+                        <DataGrid Background="LightCyan" Name="cartDataGrid" IsReadOnly="True">
+                        </DataGrid>
+                    </DockPanel>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="Table Reservation">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Background="LightPink" Name="reservationDataGrid">
-
-                    </DataGrid>
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Background="LightGoldenrodYellow" Orientation="Horizontal">
+                            <Label Margin="5,5,0,5" FontSize="20">Date: </Label>
+                            <TextBox Name="dateFieldTxt" Width="250" Margin="5" VerticalContentAlignment="Center" MaxWidth="250"></TextBox>
+                            <Label Margin="5,5,0,5" FontSize="20">Number of Tables:</Label>
+                            <TextBox Name="tableNumberFieldTxt" Width="50" Margin="5" VerticalContentAlignment="Center" MaxWidth="50"></TextBox>
+                            <Button Margin="5,5,0,5" Width="200" Click="DateReserve_Click">Book</Button>
+                        </StackPanel>
+                        
+                        <DataGrid Background="LightPink" Name="reservationDataGrid" IsReadOnly="True">
+                        </DataGrid>
+                    </DockPanel>
+                    
                 </Grid>
             </TabItem>
         </TabControl>

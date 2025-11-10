@@ -15,6 +15,11 @@ namespace DataAccess.Entities
         public ICollection<Product> Products { get; set; }
 
         public OrderStatus Status { get; set; } = OrderStatus.New;
+
+        public override string ToString()
+        {
+            return $"{Id}";
+        }
     }
     public enum OrderStatus
     {
