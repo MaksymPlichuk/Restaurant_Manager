@@ -11,7 +11,9 @@ class MenuManager
     static void Main()
     {
         Console.OutputEncoding = Encoding.UTF8;
+
         using var db = new RestaurantDbContext();
+        var service = new RestaurantService(db);
 
         while (true)
         {
@@ -31,14 +33,14 @@ class MenuManager
 
             switch (choice)
             {
-                case "1": AddProduct(db); break;
-                case "2": EditProduct(db); break;
-                case "3": DeleteProduct(db); break;
-                case "4": ShowAllProducts(db); break;
-                case "5": ShowByCategory(db); break;
-                case "6": ShowStatistics(db); break;
-                case "7": ClearOldBookings(db); break;
-                case "8": DeleteBooking(db); break;
+                case "1": service.AddProduct(); break;
+                case "2": service.EditProduct(); break;
+                case "3": service.DeleteProduct(); break;
+                case "4": service.ShowAllProducts(); break;
+                case "5": service.ShowByCategory(); break;
+                case "6": service.ShowStatistics(); break;
+                case "7": service.ClearOldBookings(); break;
+                case "8": service.DeleteBooking(); break;
                 case "0":
                     Console.WriteLine("Goodbye");
                     return;
@@ -48,8 +50,18 @@ class MenuManager
             }
         }
     }
+}
 
-    static void AddProduct(RestaurantDbContext db)
+public class RestaurantService
+{
+    private readonly RestaurantDbContext _db;
+
+    public RestaurantService(RestaurantDbContext db)
+    {
+        _db = db;
+    }
+
+    public void AddProduct()
     {
         Console.WriteLine("\n--- ADD A NEW DISH ---");
         Console.Write("Dish name: ");
@@ -65,22 +77,22 @@ class MenuManager
         Console.Write("Category: ");
         string categoryName = Console.ReadLine() ?? "";
 
-        var category = db.Categories.FirstOrDefault(c => c.Name == categoryName);
+        var category = _db.Categories.FirstOrDefault(c => c.Name == categoryName);
         if (category == null)
         {
             category = new Category { Name = categoryName };
-            db.Categories.Add(category);
+            _db.Categories.Add(category);
         }
 
         var product = new Product { Name = name, Price = price, Category = category };
-        db.Products.Add(product);
-        db.SaveChanges();
+        _db.Products.Add(product);
+        _db.SaveChanges();
         Console.WriteLine($"Dish '{name}' added successfully");
     }
 
-    static void EditProduct(RestaurantDbContext db)
+    public void EditProduct()
     {
-        ShowAllProducts(db);
+        ShowAllProducts();
         Console.Write("\nEnter the dish ID to edit: ");
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
@@ -88,7 +100,7 @@ class MenuManager
             return;
         }
 
-        var product = db.Products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
+        var product = _db.Products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
         if (product == null)
         {
             Console.WriteLine("Dish not found");
@@ -109,22 +121,22 @@ class MenuManager
         var newCategoryName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newCategoryName))
         {
-            var category = db.Categories.FirstOrDefault(c => c.Name == newCategoryName);
+            var category = _db.Categories.FirstOrDefault(c => c.Name == newCategoryName);
             if (category == null)
             {
                 category = new Category { Name = newCategoryName };
-                db.Categories.Add(category);
+                _db.Categories.Add(category);
             }
             product.Category = category;
         }
 
-        db.SaveChanges();
+        _db.SaveChanges();
         Console.WriteLine("Dish successfully updated");
     }
 
-    static void DeleteProduct(RestaurantDbContext db)
+    public void DeleteProduct()
     {
-        ShowAllProducts(db);
+        ShowAllProducts();
         Console.Write("\nEnter the dish ID to delete: ");
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
@@ -132,7 +144,7 @@ class MenuManager
             return;
         }
 
-        var product = db.Products.Find(id);
+        var product = _db.Products.Find(id);
         if (product == null)
         {
             Console.WriteLine("Dish not found");
@@ -141,10 +153,10 @@ class MenuManager
 
         Console.Write($"Are you sure you want to delete '{product.Name}'? (yes/no): ");
         var confirm = Console.ReadLine()?.ToLower();
-        if (confirm == "yes" || confirm == "no")
+        if (confirm == "yes")
         {
-            db.Products.Remove(product);
-            db.SaveChanges();
+            _db.Products.Remove(product);
+            _db.SaveChanges();
             Console.WriteLine("Dish deleted");
         }
         else
@@ -153,9 +165,9 @@ class MenuManager
         }
     }
 
-    static void ShowAllProducts(RestaurantDbContext db)
+    public void ShowAllProducts()
     {
-        var products = db.Products.Include(p => p.Category).ToList();
+        var products = _db.Products.Include(p => p.Category).ToList();
         if (products.Count == 0)
         {
             Console.WriteLine("\nThe menu is empty, add some dishes");
@@ -175,12 +187,13 @@ class MenuManager
             Console.WriteLine("───────────────────────────────────────────────");
         }
     }
-    static void ShowByCategory(RestaurantDbContext db)
+
+    public void ShowByCategory()
     {
         Console.Write("\nEnter the category name: ");
         string categoryName = Console.ReadLine() ?? "";
 
-        var products = db.Products
+        var products = _db.Products
             .Include(p => p.Category)
             .Where(p => p.Category != null && p.Category.Name == categoryName)
             .ToList();
@@ -201,11 +214,11 @@ class MenuManager
         }
     }
 
-    static void ShowStatistics(RestaurantDbContext db)
+    public void ShowStatistics()
     {
         Console.WriteLine("\n--- POPULAR DISHES REPORT ---");
 
-        var data = db.Orders
+        var data = _db.Orders
             .Include(o => o.Products)
             .SelectMany(o => o.Products)
             .GroupBy(p => p.Name)
@@ -228,7 +241,8 @@ class MenuManager
         if (format == "csv" || format == "txt")
             ExportReport(data, format);
     }
-    static void ExportReport(System.Collections.Generic.IEnumerable<dynamic> data, string format)
+
+    private void ExportReport(IEnumerable<dynamic> data, string format)
     {
         string fileName = $"PopularDishes_{DateTime.Now:yyyyMMddHHmm}.{format}";
         char separator = format == "csv" ? ',' : '\t';
@@ -242,9 +256,10 @@ class MenuManager
 
         Console.WriteLine($"Report saved as {fileName}");
     }
-    static void ClearOldBookings(RestaurantDbContext db)
+
+    public void ClearOldBookings()
     {
-        var oldBookings = db.Bookings
+        var oldBookings = _db.Bookings
             .Where(b => b.BookingDate < DateTime.Now.AddDays(-7))
             .ToList();
 
@@ -257,8 +272,8 @@ class MenuManager
         Console.WriteLine($"Found {oldBookings.Count} old bookings. Delete them? (y/n): ");
         if ((Console.ReadLine() ?? "").Trim().ToLower() == "y")
         {
-            db.Bookings.RemoveRange(oldBookings);
-            db.SaveChanges();
+            _db.Bookings.RemoveRange(oldBookings);
+            _db.SaveChanges();
             Console.WriteLine("Old bookings deleted.");
         }
         else
@@ -267,9 +282,9 @@ class MenuManager
         }
     }
 
-    static void DeleteBooking(RestaurantDbContext db)
+    public void DeleteBooking()
     {
-        var bookings = db.Bookings.Include(b => b.User).ToList();
+        var bookings = _db.Bookings.Include(b => b.User).ToList();
         if (bookings.Count == 0)
         {
             Console.WriteLine("No bookings available.");
@@ -287,15 +302,15 @@ class MenuManager
             return;
         }
 
-        var booking = db.Bookings.Find(id);
+        var booking = _db.Bookings.Find(id);
         if (booking == null)
         {
             Console.WriteLine("Booking not found.");
             return;
         }
 
-        db.Bookings.Remove(booking);
-        db.SaveChanges();
+        _db.Bookings.Remove(booking);
+        _db.SaveChanges();
         Console.WriteLine($"Booking #{id} deleted.");
     }
 }
