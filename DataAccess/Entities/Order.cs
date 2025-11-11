@@ -15,7 +15,14 @@ namespace DataAccess.Entities
         public ICollection<Product> Products { get; set; }
 
         public OrderStatus Status { get; set; } = OrderStatus.New;
-
+        public string ProductList
+        {
+            get
+            {
+                if (Products == null || !Products.Any()) { return "-"; }
+                return string.Join(", ", Products.Select(p => p.Name));
+            }
+        }
         public override string ToString()
         {
             return $"{Id}";
