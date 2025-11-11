@@ -30,17 +30,24 @@
                 <Grid Background="#FFE5E5E5">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Background="LightGoldenrodYellow" Orientation="Horizontal">
-                            <Label Margin="5,5,0,5" FontSize="20">Date: </Label>
+                            <Label Margin="5,5,0,5" FontSize="20">Date:</Label>
                             <TextBox Name="dateFieldTxt" Width="250" Margin="5" VerticalContentAlignment="Center" MaxWidth="250"></TextBox>
                             <Label Margin="5,5,0,5" FontSize="20">Number of Tables:</Label>
                             <TextBox Name="tableNumberFieldTxt" Width="50" Margin="5" VerticalContentAlignment="Center" MaxWidth="50"></TextBox>
                             <Button Margin="5,5,0,5" Width="200" Click="DateReserve_Click">Book</Button>
                         </StackPanel>
-                        
+
                         <DataGrid Background="LightPink" Name="reservationDataGrid" IsReadOnly="True">
                         </DataGrid>
                     </DockPanel>
-                    
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Order Status">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Background="Cyan" Name="orderDataGrid" IsReadOnly="True">
+                    </DataGrid>
+
                 </Grid>
             </TabItem>
         </TabControl>
