@@ -57,9 +57,14 @@ namespace WpfApp1
                     else if (selectedTab.Header.ToString()== "Table Reservation")
                     {
                         LoadReservationData();
-                    }else if (selectedTab.Header.ToString()== "Order Status")
+                    }
+                    else if (selectedTab.Header.ToString()== "Order Status")
                     {
                         LoadOrderData();
+                    }
+                    else if (selectedTab.Header.ToString()== "Reviews")
+                    {
+                        LoadReviewData();
                     }
                 }
             }
@@ -72,6 +77,10 @@ namespace WpfApp1
         {
             var data = context.Orders.Include(o=>o.User).Include(o=>o.Products).ToList();
             orderDataGrid.ItemsSource = data; 
+        }private void LoadReviewData()
+        {
+            var data = context.Reviews.Include(o=>o.User).ToList();
+            reviewDataGrid.ItemsSource = data; 
         }
         private void AddButtonToDataContext()
         {
@@ -200,6 +209,38 @@ namespace WpfApp1
                     MessageBox.Show(ex.Message);
                 }
                
+            }
+        }
+        private void FinishReview_Click(object sender, RoutedEventArgs e)
+        {
+            if (LoggedInUser.Role!=UserRole.Manager)
+            {
+                MessageBox.Show("Only Managers can add your review", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                string review = reviewTb.Text;
+                int rating = int.Parse(ratingTb.Text);
+
+                if (rating < 0 && rating > 5 ) { MessageBox.Show("Review Must be > 0 and < 5", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+
+                context.Reviews.Add(
+                    new Review
+                    {
+                        UserId=LoggedInUser.Id,
+                        Rating = rating,
+                        ReviewDate = DateTime.Now,
+                        Content = review
+                    });
+                context.SaveChanges();
+                MessageBox.Show("Review was succesfully made!");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
     }
