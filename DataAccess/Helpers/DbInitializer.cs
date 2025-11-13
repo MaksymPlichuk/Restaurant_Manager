@@ -39,8 +39,7 @@ namespace DataAccess.Helpers
                     UserId = 2,
                     BookingDate = new DateTime(2025,12,09,10,00,00).AddDays(2).Date.AddHours(20),
                     AmountOfTables = 1
-                }
-
+                },
             });
 
 
@@ -88,6 +87,46 @@ namespace DataAccess.Helpers
                     Price = 2.99,
                     CategoryId = 5,
                     OrderId = 2
+                },
+                new Product
+                {
+                    Id = 6,
+                    Name = "Grilled Chicken Wings",
+                    Price = 9.99,
+                    CategoryId = 1,
+                    OrderId = 3
+                },
+                new Product
+                {
+                    Id = 7,
+                    Name = "Greek Salad",
+                    Price = 7.49,
+                    CategoryId = 2,
+                    OrderId = 1
+                },
+                new Product
+                {
+                    Id = 8,
+                    Name = "Tiramisu",
+                    Price = 6.99,
+                    CategoryId = 3,
+                    OrderId = 2
+                },
+                new Product
+                {
+                    Id = 9,
+                    Name = "French Onion Soup",
+                    Price = 6.49,
+                    CategoryId = 4,
+                    OrderId = 3
+                },
+                new Product
+                {
+                    Id = 10,
+                    Name = "Iced Coffee",
+                    Price = 3.99,
+                    CategoryId = 5,
+                    OrderId = 1
                 }
 
             });

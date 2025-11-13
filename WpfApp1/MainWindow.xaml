@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ClientWindow" Height="450" Width="800">
     <Grid>
         <TabControl Name="myTabControl" SelectionChanged="myTabControl_SelectionChanged">
             <TabItem Header="Menu">
@@ -48,6 +48,23 @@
                     <DataGrid Background="Cyan" Name="orderDataGrid" IsReadOnly="True">
                     </DataGrid>
 
+                </Grid>
+            </TabItem>
+            <TabItem Header="Reviews">
+                <Grid Background="#FFE5E5E5">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Background="LightGoldenrodYellow" Orientation="Horizontal">
+                            <Label Margin="5,5,0,5" FontSize="20">Review:</Label>
+                            <TextBox Name="reviewTb" Width="250" Margin="5" VerticalContentAlignment="Center" MaxWidth="250"></TextBox>
+                            <Label Margin="5,5,0,5" FontSize="20">Rating:</Label>
+                            <TextBox Name="ratingTb" Width="50" Margin="5" VerticalContentAlignment="Center" MaxWidth="50"></TextBox>
+                            <Button Margin="5,5,0,5" Width="200" Click="FinishReview_Click">Review</Button>
+                        </StackPanel>
+                        
+                        <DataGrid Background="LightSteelBlue" Name="reviewDataGrid" IsReadOnly="True">
+                        </DataGrid>
+                    </DockPanel>
+                    
                 </Grid>
             </TabItem>
         </TabControl>
