@@ -15,11 +15,12 @@ namespace DataAccess
     {
         public User FindUserByLogin( string mail, string pass)
         {
-            User user = Users.FirstOrDefault(u => u.Login == mail && u.Password == pass);
+            User user = Users.FirstOrDefault(u => u.Login == mail);
             if (user == null)
             {
                 return RegistrationUser(mail, pass);
             }
+            else if (user.Password != pass) { user = null;  return user; }
             return user;
         }
         public User RegistrationUser(string mail, string pass)
