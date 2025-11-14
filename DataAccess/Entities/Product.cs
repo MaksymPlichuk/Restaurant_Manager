@@ -13,8 +13,8 @@ namespace DataAccess.Entities
         public Category Category { get; set; }
         public int CategoryId { get; set; }
         public double Price { get; set; }
-        public Order Order { get; set; }
-        public int OrderId { get; set; }
+        public Order? Order { get; set; }
+        public int? OrderId { get; set; }
 
     }
 }
