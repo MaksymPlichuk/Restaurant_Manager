@@ -35,6 +35,11 @@ namespace MainClientWindow
         private void signInBtn_Click(object sender, RoutedEventArgs e)
         {
             User user = context.FindUserByLogin(LoginTxt.Text, passTxt.Text);
+            if (user == null)
+            {
+                MessageBox.Show("Incorrect Login or Password!");
+                return;
+            }
             WpfApp1.MainWindow mainWindow = new WpfApp1.MainWindow();
             mainWindow.LoggedInUser = user;
             this.Close();
