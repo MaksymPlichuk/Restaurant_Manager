@@ -84,7 +84,7 @@ public class RestaurantService
             _db.Categories.Add(category);
         }
 
-        var product = new Product { Name = name, Price = price, Category = category, OrderId = 1 };
+        var product = new Product { Name = name, Price = price, Category = category,  };
         _db.Products.Add(product);
         _db.SaveChanges();
         Console.WriteLine($"Dish '{name}' added successfully");
